@@ -60,6 +60,12 @@
  **/
 #define BE_DEBUG_VAR_INFO               1
 
+/* Macro: BE_USE_OBSERVABILITY_HOOK
+ * Use the obshook function to report low-level actions.
+ * Default: 0
+ **/
+#define BE_USE_OBSERVABILITY_HOOK       0
+
 /* Macro: BE_STACK_TOTAL_MAX
  * Set the maximum total stack size.
  * Default: 20000
@@ -87,7 +93,7 @@
  * will not be used.
  * Default: 0
  **/
-#define BE_USE_FILE_SYSTEM              1
+#define BE_USE_FILE_SYSTEM              0
 
 /* Macro: BE_USE_SCRIPT_COMPILER
  * Enable compiler when BE_USE_SCRIPT_COMPILER is not 0, otherwise
@@ -131,6 +137,14 @@
  **/
 #define BE_USE_DEBUG_HOOK               1
 
+/* Macro: BE_USE_DEBUG_GC
+ * Enable GC debug mode. This causes an actual gc after each
+ * allocation. It's much slower and should not be used
+ * in production code.
+ * Default: 0
+ **/
+#define BE_USE_DEBUG_GC                  0
+
 /* Macro: BE_USE_XXX_MODULE
  * These macros control whether the related module is compiled.
  * When they are true, they will enable related modules. At this
@@ -142,9 +156,12 @@
 #define BE_USE_MATH_MODULE              1
 #define BE_USE_TIME_MODULE              1
 #define BE_USE_OS_MODULE                1
+#define BE_USE_GLOBAL_MODULE            1
 #define BE_USE_SYS_MODULE               1
 #define BE_USE_DEBUG_MODULE             1
 #define BE_USE_GC_MODULE                1
+#define BE_USE_SOLIDIFY_MODULE          1
+#define BE_USE_STRICT_MODULE            1
 
 /* Macro: BE_EXPLICIT_XXX
  * If these macros are defined, the corresponding function will
