@@ -134,7 +134,7 @@
  * will not be used.
  * Default: 0
  **/
-#define BE_USE_FILE_SYSTEM              0
+#define BE_USE_FILE_SYSTEM              1
 
 /* Macro: BE_USE_SCRIPT_COMPILER
  * Enable compiler when BE_USE_SCRIPT_COMPILER is not 0, otherwise
@@ -220,6 +220,7 @@
 #define BE_USE_SOLIDIFY_MODULE          1
 #define BE_USE_INTROSPECT_MODULE        1
 #define BE_USE_STRICT_MODULE            1
+#define BE_USE_JS_MODULE                1
 
 /* Macro: BE_EXPLICIT_XXX
  * If these macros are defined, the corresponding function will
