@@ -36,12 +36,28 @@
  **/
 #define BE_USE_SINGLE_FLOAT             0
 
+/* Macro: BE_BYTES_MAX_SIZE
+ * Maximum size in bytes of a `bytes()` object.
+ * Putting too much pressure on the memory allocator can do
+ * harm, so we limit the maximum size.
+ * Default: 32kb
+ **/
+#define BE_BYTES_MAX_SIZE               (32*1024)   /* 32 kb default value */
+
 /* Macro: BE_USE_PRECOMPILED_OBJECT
  * Use precompiled objects to avoid creating these objects at
  * runtime. Enable this macro can greatly optimize RAM usage.
  * Default: 1
  **/
 #define BE_USE_PRECOMPILED_OBJECT       1
+
+/* Macro: BE_DEBUG_SOURCE_FILE
+ * Indicate if each function remembers its source file name
+ * 0: do not keep the file name (saves 4 bytes per function)
+ * 1: keep the source file name
+ * Default: 1
+ **/
+#define BE_DEBUG_SOURCE_FILE            1
 
 /* Macro: BE_DEBUG_RUNTIME_INFO
  * Set runtime error debugging information.
@@ -60,11 +76,20 @@
  **/
 #define BE_DEBUG_VAR_INFO               1
 
-/* Macro: BE_USE_OBSERVABILITY_HOOK
+/* Macro: BE_USE_PERF_COUNTERS
  * Use the obshook function to report low-level actions.
- * Default: 0
+ * Default: 1
  **/
-#define BE_USE_OBSERVABILITY_HOOK       0
+#define BE_USE_PERF_COUNTERS            1
+
+/* Macro: BE_VM_OBSERVABILITY_SAMPLING
+ * If BE_USE_PERF_COUNTERS == 1
+ * then the observability hook is called regularly in the VM loop
+ * allowing to stop infinite loops or too-long running code.
+ * The value is a power of 2.
+ * Default: 20 - which translates to 2^20 or ~1 million instructions
+ **/
+#define BE_VM_OBSERVABILITY_SAMPLING    20
 
 /* Macro: BE_STACK_TOTAL_MAX
  * Set the maximum total stack size.
@@ -79,6 +104,22 @@
  * Default: 10
  **/
 #define BE_STACK_FREE_MIN               10
+
+/* Macro: BE_STACK_START
+ * Set the starting size of the stack at VM creation.
+ * Default: 50
+ **/
+#define BE_STACK_START                  50
+
+/* Macro: BE_CONST_SEARCH_SIZE
+ * Constants in function are limited to 255. However the compiler
+ * will look for a maximum of pre-existing constants to avoid
+ * performance degradation. This may cause the number of constants
+ * to be higher than required.
+ * Increase is you need to solidify functions.
+ * Default: 50
+ **/
+#define BE_CONST_SEARCH_SIZE            50
 
 /* Macro: BE_STACK_FREE_MIN
  * The short string will hold the hash value when the value is
@@ -121,7 +162,7 @@
  * otherwise disable the feature.
  * Default: 1
  **/
-#define BE_USE_SHARED_LIB               1
+#define BE_USE_SHARED_LIB               0
 
 /* Macro: BE_USE_OVERLOAD_HASH
  * Allows instances to overload hash methods for use in the
@@ -145,6 +186,22 @@
  **/
 #define BE_USE_DEBUG_GC                  0
 
+/* Macro: BE_USE_DEBUG_STACK
+ * Enable Stack Resize debug mode. At each function call
+ * the stack is reallocated at a different memory location
+ * and the previous location is cleared with toxic data.
+ * Default: 0
+ **/
+#define BE_USE_DEBUG_STACK               0
+
+/* Macro: BE_USE_MEM_ALIGNED
+ * Some embedded processors have special memory areas
+ * with read/write constraints of being aligned to 32 bits boundaries.
+ * This options tries to move such memory areas to this region.
+ * Default: 0
+ **/
+#define BE_USE_MEM_ALIGNED               0
+
 /* Macro: BE_USE_XXX_MODULE
  * These macros control whether the related module is compiled.
  * When they are true, they will enable related modules. At this
@@ -155,12 +212,13 @@
 #define BE_USE_JSON_MODULE              1
 #define BE_USE_MATH_MODULE              1
 #define BE_USE_TIME_MODULE              1
-#define BE_USE_OS_MODULE                0
+#define BE_USE_OS_MODULE                1
 #define BE_USE_GLOBAL_MODULE            1
 #define BE_USE_SYS_MODULE               1
 #define BE_USE_DEBUG_MODULE             1
 #define BE_USE_GC_MODULE                1
 #define BE_USE_SOLIDIFY_MODULE          1
+#define BE_USE_INTROSPECT_MODULE        1
 #define BE_USE_STRICT_MODULE            1
 
 /* Macro: BE_EXPLICIT_XXX
